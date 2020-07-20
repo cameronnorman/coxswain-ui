@@ -1,69 +1,48 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import Navbar from './components/layout/Navbar.js';
-import Card from './components/application/card.js';
+import Card from './components/Card/card.js';
 import ServerStatusBar from './components/ServerStatusBar/ServerStatusBar.js';
 import Backdrop from './components/Backdrop/Backdrop.js';
+import {getServices} from './services/servicesApi.js';
 
 function App() {
-    let apps = [
-      {
-        name: 'Sheetzu',
-        attributes: [
-          { label: 'URL', value: 'sheets.normans.co.za' },
-          { label: 'SSL Certificate', value: 'normans.pem'},
-          { label: 'SSL Certificate Key', value: 'normans_key.pem'},
-          { label: 'Host', value: 'sheetsu_web_1'},
-          { label: 'Port', value: '3000'},
-          { label: 'Exposed Port', value: '443'}
-        ],
-        route: 'Protected'
-      },
-      {
-        name: 'Monitoring',
-        attributes: [
-          { label: 'URL', value: 'monitoring.normans.co.za' },
-          { label: 'SSL Certificate', value: 'normans.pem'},
-          { label: 'SSL Certificate Key', value: 'normans_key.pem'},
-          { label: 'Host', value: 'sheetsu_web_1'},
-          { label: 'Port', value: '3000'},
-          { label: 'Exposed Port', value: '443'}
-        ],
-        route: 'Open'
-      },
-      {
-        name: 'Movie Library',
-        attributes: [
-          { label: 'URL', value: 'library.normans.co.za' },
-          { label: 'SSL Certificate', value: 'normans.pem'},
-          { label: 'SSL Certificate Key', value: 'normans_key.pem'},
-          { label: 'Host', value: 'sheetsu_web_1'},
-          { label: 'Port', value: '3000'},
-          { label: 'Exposed Port', value: '443'}
-        ],
-        route: 'Open'
-      }
-    ]
+    let [loading, setLoading] = useState(false)
+    let [dockerServices, setDockerServices] = useState([])
+    const loadServices = async () => {
+      setLoading(true)
+      let res = await getServices()
+      setDockerServices(res.servers)
+      setLoading(false)
+    }
 
-    let rendered_apps = apps.map((info) =>
-      <Card info={info}/>
-    );
-
+    useEffect(() => {
+      loadServices()
+    }, [])
+    
     const Container = () => {
+      let renderedDockerServices = dockerServices.map((dockerService) => <Card info={dockerService} />);
+
       return (
         <div className="container">
           <ServerStatusBar />
-          {rendered_apps}
+          {renderedDockerServices}
         </div>
       )
     }
-    return (
-      <div>
-        <Backdrop />
-        <Navbar />
-        <Container />
-      </div>
-    );
+
+    const mainLayout = (children) => {
+      return (
+        <div>
+          <Backdrop />
+          <Navbar />
+          {children}
+        </div>
+      )
+    }
+
+    let container = Container()
+    return loading ? ( <mainLayout children={[<p>Loading...</p>]} />) : ( mainLayout(container) )
 }
 
 export default App;
