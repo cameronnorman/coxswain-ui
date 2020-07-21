@@ -1,48 +1,37 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from "react-router-dom";
+
 import "./App.css";
 import Navbar from './components/layout/Navbar.js';
-import Card from './components/Card/card.js';
 import ServerStatusBar from './components/ServerStatusBar/ServerStatusBar.js';
 import Backdrop from './components/Backdrop/Backdrop.js';
-import {getServices} from './services/servicesApi.js';
+import IndexPage from './pages/index.js';
+import EditPage from './pages/edit.js';
 
 function App() {
-    let [loading, setLoading] = useState(false)
-    let [dockerServices, setDockerServices] = useState([])
-    const loadServices = async () => {
-      setLoading(true)
-      let res = await getServices()
-      setDockerServices(res.servers)
-      setLoading(false)
-    }
-
-    useEffect(() => {
-      loadServices()
-    }, [])
-    
-    const Container = () => {
-      let renderedDockerServices = dockerServices.map((dockerService) => <Card info={dockerService} />);
-
-      return (
+    return (
+      <>
+        <Backdrop />
+        <Navbar />
+        <ServerStatusBar />
         <div className="container">
-          <ServerStatusBar />
-          {renderedDockerServices}
+          <Router>
+            <Switch>
+              <Route path="/:id/edit">
+                <EditPage />
+              </Route>
+              <Route path="/">
+                <IndexPage />
+              </Route>
+            </Switch>
+          </Router>
         </div>
-      )
-    }
-
-    const mainLayout = (children) => {
-      return (
-        <div>
-          <Backdrop />
-          <Navbar />
-          {children}
-        </div>
-      )
-    }
-
-    let container = Container()
-    return loading ? ( <mainLayout children={[<p>Loading...</p>]} />) : ( mainLayout(container) )
+      </>
+    )
 }
 
 export default App;

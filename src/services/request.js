@@ -1,9 +1,10 @@
 const request = async (method, path, body) => {
-  const baseUrl = "https://proxy.normans.co.za"
-  //const baseUrl = "http://localhost:3000"
+  //const baseUrl = "https://proxy.normans.co.za"
+  const baseUrl = "http://localhost:3000"
   const token = "ck1f9y8fo0000t0xyc66fleqk"
   const url = `${baseUrl}/nginx${path}?token=${token}`
-  const headers = {}
+  const headers = new Headers({})
+  headers.set('Content-Type', 'application/json')
   const fetchOptions = { method, headers, body }
 
   const response = await fetch(url, fetchOptions)

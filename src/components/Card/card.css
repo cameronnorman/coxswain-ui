@@ -46,8 +46,17 @@
   margin-right: 10px;
 }
 
+table {
+  width: 100%
+}
+
 table > tbody > tr > td:first-child {
-    font-weight: bold;
+  font-weight: bold;
+  width: 20%
+}
+
+table > tbody > tr > td:last-child {
+  width: 80%
 }
 
 td {
@@ -59,7 +68,6 @@ td p {
   font-weight: 700;
 }
 
-
 p {
   margin: 0
 }
@@ -69,4 +77,12 @@ a:link{
 }
 a:visited{
   color: #482D52;
+}
+
+input {
+  padding: 10px;
+  width: 100%;
+  border-radius: 6px;
+  border-color: #482D52;
+  font-size: 14px;
 }
