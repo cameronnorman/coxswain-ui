@@ -1,7 +1,6 @@
 const request = async (method, path, body) => {
-  //const baseUrl = "https://proxy.normans.co.za"
   const baseUrl = "http://localhost:3000"
-  const token = "ck1f9y8fo0000t0xyc66fleqk"
+  const token = "abc"
   const url = `${baseUrl}/nginx${path}?token=${token}`
   const headers = new Headers({})
   headers.set('Content-Type', 'application/json')

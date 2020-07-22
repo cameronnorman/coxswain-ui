@@ -10,7 +10,6 @@ function Navbar() {
         <a href="/"><MdRowing size={36}/></a>
         <h1>Coxswain</h1>
       </div>
-      {/* <p>ip-address: bleh</p> */}
     </div>
   );
 }

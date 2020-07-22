@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Card from '../components/Card/card.js';
 import Loader from '../components/Loader/Loader.js';
-import { getServices } from '../services/servicesApi.js';
+import { getServices, updateServices, nginx } from '../services/servicesApi.js';
 
 const IndexPage = () => {
   const [loading, setLoading] = useState(false)
@@ -13,11 +13,23 @@ const IndexPage = () => {
     setLoading(false)
   }
 
+  const toggleProtected = async (index) => {
+    let tempServices = [...dockerServices]
+    if (tempServices[index].basic_auth) {
+      delete tempServices[index].basic_auth
+    } else {
+      tempServices[index].basic_auth = { "message": "This is protected" }
+    }
+    setDockerServices(tempServices)
+    updateServices({servers: tempServices})
+    nginx("restart")
+  }
+
   useEffect(() => {
     loadServices()
   }, [])
   
-  return loading ? (<Loader />) : ( dockerServices.map((dockerService, index) => <Card key={index} info={dockerService} index={index} />) )
+  return loading ? (<Loader />) : ( dockerServices.map((dockerService, index) => <Card key={index} info={dockerService} index={index} toggleProtected={toggleProtected}/>) )
 }
 
 export default IndexPage

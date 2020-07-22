@@ -42,8 +42,14 @@
  
 }
 
+
+.float-right {
+  cursor: pointer;
+}
+
 .float-right svg {
   margin-right: 10px;
+  cursor: pointer;
 }
 
 table {

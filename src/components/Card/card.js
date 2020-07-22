@@ -5,18 +5,18 @@ import { MdLock, MdLockOpen } from 'react-icons/md'
 import { GoPencil, GoTrashcan } from 'react-icons/go'
 import './card.css'
 
-function Card({ info, index }) {
+function Card({ info, index, toggleProtected }) {
   const RouteType = ({auth}) => {
     if(auth) {
       return (
-        <div className='float-right danger'>
+        <div onClick={() => toggleProtected(index) } className='float-right danger'>
           <MdLock size={30}/>
           <p>Protected Route</p>
         </div>
       )
     } else {
       return (
-        <div className='float-right success'> 
+        <div onClick={() => toggleProtected(index) } className='float-right success'> 
           <MdLockOpen size={30}/>
           <p>Open Route</p>
         </div>
@@ -55,7 +55,7 @@ function Card({ info, index }) {
           </tr>
         </tbody>
       </table>
-      <RouteType auth={info.basic_auth} />
+      <RouteType  auth={info.basic_auth} />
     </div>
   );
 }
